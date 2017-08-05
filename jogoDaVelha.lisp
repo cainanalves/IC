@@ -1,30 +1,12 @@
 
 (defvar tabuleiro '((nil nil nil) (nil nil nil) (nil nil nil)))
 (defvar vitoria (- 1))
-(defvar regras '( (0 0 0 1 0 2) 
-					(0 0 0 2 0 1) 
-					(0 1 0 2 0 0) 
-					 (1 0 1 1 1 2) 
-					 (1 1 1 2 1 0) 
-					 (1 0 1 2 1 1) 
-					 (2 0 2 1 2 2) 
-					 (2 1 2 2 2 0) 
-					 (2 0 2 2 2 1)
-					 (0 0 1 0 2 0) 
-					 (0 0 2 0 1 0) 
-					 (1 0 2 0 0 0) 
-					 (0 1 1 1 2 1) 
-					 (1 1 2 1 0 1) 
-					 (0 1 2 1 1 1) 
-					 (0 2 1 2 2 2) 
-					 (1 2 2 2 0 2) 
-					 (0 2 2 2 1 2)
-					 (0 0 1 1 2 2) 
-					 (1 1 2 2 0 0) 
-					 (0 0 2 2 1 1) 
-					 (0 2 1 1 2 0) 
-					 (1 1 2 0 0 2) 
-					 (2 0 0 2 1 1) ) )
+(defvar regras '( (0 0 0 1 0 2) (0 0 0 2 0 1) (0 1 0 2 0 0) (1 0 1 1 1 2) (1 1 1 2 1 0) (1 0 1 2 1 1) (2 0 2 1 2 2) (2 1 2 2 2 0) (2 0 2 2 2 1) (0 0 1 0 2 0) 
+	(0 0 2 0 1 0) (1 0 2 0 0 0) (0 1 1 1 2 1) (1 1 2 1 0 1) (0 1 2 1 1 1) (0 2 1 2 2 2) (1 2 2 2 0 2) (0 2 2 2 1 2) (0 0 1 1 2 2) (1 1 2 2 0 0) (0 0 2 2 1 1) 
+	(0 2 1 1 2 0) (1 1 2 0 0 2) (2 0 0 2 1 1) ) )
+
+;As jogadas são verificadas em ordem: CENTRO, CANTOS E MEIOS
+(defvar melhores-jogadas '( (1 1) (0 0) (0 2) (2 0) (2 2) (0 1) (1 2) (2 1) (1 0)) )
 
 (defun imprimir-tabuleiro ()
 	(loop for i in tabuleiro do 
@@ -54,6 +36,17 @@
 	)
 )
 
+(defun busca-melhor-jogada ()
+	(loop for i in melhores-jogadas do
+		(if (equal (nth (nth 1 i) (nth (nth 0 i) tabuleiro)) nil)
+			(progn 
+				(setf (nth (nth 1 i) (nth (nth 0 i) tabuleiro)) 0)
+				(return)
+			)	
+		)
+	)
+)
+
 (defun verificar-jogada-inteligente ()
 	(let ((achouRegra 0))
 		(busca-chance-vitoriaPC)
@@ -71,20 +64,8 @@
 				)
 
 				(if (= achouRegra 0)
-					(let ((condicao 0) (linha (random 3 (make-random-state t))) (coluna (random 3 (make-random-state t))))
-						(loop do
-							(if (or (equal (nth coluna (nth linha tabuleiro)) 1) (equal (nth coluna (nth linha tabuleiro)) 0))
-								(progn
-									(setf linha (random 3 (make-random-state t)))
-									(setf coluna (random 3 (make-random-state t)))
-								)
-								(return)
-							)
-						)
-						(setf (nth coluna (nth linha tabuleiro)) 0)
-					)
-					
-			)
+					(busca-melhor-jogada)					
+				)
 			)
 		)
 		
