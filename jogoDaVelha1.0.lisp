@@ -24,7 +24,7 @@
 	)
 ) 
 
-(defun busca-chance-vitoriaPC ()
+(defun buscar-chance-vitoriaPC ()
 	(loop for i in regras do 
 		(if (and (and (equal (nth (nth 1 i) (nth (nth 0 i) tabuleiro)) 0) (equal (nth (nth 3 i) (nth (nth 2 i) tabuleiro)) 0)) (equal (nth (nth 5 i) (nth (nth 4 i) tabuleiro)) nil))
 			(progn
@@ -36,7 +36,7 @@
 	)
 )
 
-(defun busca-melhor-jogada ()
+(defun buscar-melhor-jogada ()
 	(loop for i in melhores-jogadas do
 		(if (equal (nth (nth 1 i) (nth (nth 0 i) tabuleiro)) nil)
 			(progn 
@@ -49,8 +49,7 @@
 
 (defun verificar-jogada-inteligente ()
 	(let ((achouRegra 0))
-		(busca-chance-vitoriaPC)
-
+		(buscar-chance-vitoriaPC)
 		(if (< vitoria 0)
 			(progn
 				(loop for i in regras do 
@@ -62,9 +61,8 @@
 						)
 					)
 				)
-
 				(if (= achouRegra 0)
-					(busca-melhor-jogada)					
+					(buscar-melhor-jogada)					
 				)
 			)
 		)
