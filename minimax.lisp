@@ -7,12 +7,8 @@
 ;	0 se for chance de empate
 ; Buscar mesmo valor com chaves diferentes:  (setf T (make-hash-table :test 'equal))
 
-;					_______ Utilizar tabela Hash (make-hash-table)
-;				   |   _____________ State
-;                  |  |
-;                  \/ \/
 ;algorithm search (u, s, p)
-;	if final(s) then	 /\______ Player
+;	if final(s) then	 
 ;		u[s] <- result(s) 
 ;	for each empty place i do
 ;		s' <- copy(s)
@@ -36,30 +32,27 @@
 (defvar player 'x)
 (defvar utility (make-hash-table :test 'equal))
 
+(defun ai (pos)
+	(equalp (nth pos current_state) 'x)
+)
+
+(defun h (pos)
+	(equalp (nth pos current_state) 'o)
+)
+
+(defun not_e (pos)
+	(not (equalp (nth pos current_state) '_))
+)
+
 (defun toggle_player(player)
 	(if (equalp player 'x) 'o 'x)
 )
 
-(defun state_utility(state)
-
-)
 (defun final_sheet(state)
 	(let ((test (test_win state)))
-		(if (car test) t nil) 
-	)
+		(if (car test) t nil) )
 )
-(defun search_state()
 
-)
-(defun ai (pos)
-	(equalp (nth pos current_state) 'x)
-)
-(defun h (pos)
-	(equalp (nth pos current_state) 'o)
-)
-(defun not_e (pos)
-	(not (equalp (nth pos current_state) '_))
-)
 
 (defun test_win(state)
 	(let ()
