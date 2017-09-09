@@ -94,8 +94,8 @@
 				(if (eq (nth i state) '_)
 					(progn  
 						(setf copy state)
-						(print state)
 						(setf (nth i copy) player)
+						(print copy)
 						(searchh utility copy (toggle_player player))	
 						(setf (gethash state utility) (+ (gethash state utility) (gethash copy utility)))
 						(setf (nth i copy) '_)
