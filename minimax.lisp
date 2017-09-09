@@ -85,17 +85,14 @@
 
 (defun searchh (utility state player)
 	(let (copy)
-		(loop for i from 0 to 8 do
-			(if (final_sheet state) 
-				(progn
-					(save_utility state (result state))
-					(return)
-				)
+		(if (final_sheet state) 
+			(save_utility state (result state))
+			(loop for i from 0 to 8 do
 				(if (eq (nth i state) '_)
 					(progn  
 						(setf copy state)
 						(setf (nth i copy) player)
-						(print copy)
+						(print copy) (write (gethash state utility))
 						(searchh utility copy (toggle_player player))	
 						(setf (gethash state utility) (+ (gethash state utility) (gethash copy utility)))
 						(setf (nth i copy) '_)
