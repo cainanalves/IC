@@ -82,7 +82,7 @@
 		(cond ((equalp p 'x) -1) ((equalp p 'o) 1) ((equalp p 'dr) 0) )
 	)
 )
-(defvar cont 0)
+
 (defun searchh (utility state player)
 	(let (copy)
 		(loop for i from 0 to 8 do
@@ -94,18 +94,16 @@
 				(if (eq (nth i state) '_)
 					(progn  
 						(setf copy state)
-						(setf (nth i state) player)(print state)
-						(searchh utility copy (toggle_player player))
+						(print state)
+						(setf (nth i copy) player)
+						(searchh utility copy (toggle_player player))	
 						(setf (gethash state utility) (+ (gethash state utility) (gethash copy utility)))
 						(setf (nth i copy) '_)
-						(+ cont 1)
 					)
 				)
 			)
 		)
-		
 	)
-	;(print cont)
 	
 )
 
