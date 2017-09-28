@@ -4,16 +4,15 @@ print(getwd())
 database <- read.csv("database.csv")
 
 col <- 2
-class <- c(-1,1,1,1)
+class <- c(-1,-1,1,1)
 LF <- 0.1 #Learning Factor
-wb <- 0
 
-v <- function(x,w,b){
+
+v <- function(x,w){
   sum <- 0
   for (i in 1:length(x)){
     sum <- sum + (x[i]*w[i])
   }
-  #sum <- sum + b*wb
   return (sum)
 }
 
@@ -34,19 +33,18 @@ learn <- function(x,w,error){
 
 #Lê da base e insere no vetor x
 read_database <- function(row){
-  x <- rep(0,2)
-  for (i in 1:2){
+  x <- rep(0,3)
+  for (i in 1:3){
       x[i] <- database[row,i]
   }
   return (x)
 }
 
 perceptron <- function(W){
-  b <- 1
   w <- W
   for (i in 1:4){
     x <- read_database(i)
-    result <- v(x,w,b)
+    result <- v(x,w)
     active <- activation(result)
     epoch <- 0
     while (result != class(i)){
@@ -54,7 +52,7 @@ perceptron <- function(W){
       w <- learn(x,w,error)
       #print(w)
       epoch <- epoch + 1
-      result <- v(x,w,b)
+      result <- v(x,w)
       if(epoch == 90)
         break
     }
@@ -62,7 +60,7 @@ perceptron <- function(W){
   }
 }
 
-sort <- runif (2,-1,1)
+sort <- runif (3,-1,1)
 print(sort)
 weights <- c(sort)
 perceptron(weights)
