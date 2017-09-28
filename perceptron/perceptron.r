@@ -55,14 +55,16 @@ perceptron <- function(W){
       #print(w)
       epoch <- epoch + 1
       result <- v(x,w,b)
-      if(epoch == 100)
+      if(epoch == 90)
         break
     }
     print(result)
   }
 }
 
-weights <- c(0,1)
+sort <- runif (2,-1,1)
+print(sort)
+weights <- c(sort)
 perceptron(weights)
 
 
