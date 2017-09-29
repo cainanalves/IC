@@ -20,8 +20,13 @@ v <- function(x,w){
 activation <- function(result){
   if(result != 0)
     return (TRUE)
-  else
-    return (FALSE)
+  return (FALSE)
+}
+
+training <- function(result,line){
+  if(result != class[line])
+    return (TRUE)
+  return (FALSE)
 }
 
 #Função de treinamento
@@ -47,8 +52,9 @@ perceptron <- function(W){
     x <- read_database(i)
     result <- v(x,w)
     active <- activation(result)
+    learning <- training(result,i)
     epoch <- 0
-    while (result != class(i)){
+    while (active && learning){
       error <- class[i] - result
       w <- learn(x,w,error)
       #print(w)
