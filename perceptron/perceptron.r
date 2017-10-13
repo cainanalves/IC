@@ -1,12 +1,13 @@
-#print(getwd())
-#setwd("/home/cainan/Inteligência_Computacional/perceptron/")
+print(getwd())
+#setwd("/home/cainan/IC/perceptron/")
 database <- read.csv("database.csv")
 
 rows <- 4
 cols <- 3
 LF <- 0.1 #Learning Factor
 #######################
-class <- c(-1,-1,-1,1)# AND
+class <- c(-1,-1,1,1) #
+     #<- c(-1,-1,-1,1)# AND
       # <- c(-1,1,1,1)# OR
       # <- c(1,1,-1,1)# IMPLIES
 #######################
@@ -62,7 +63,7 @@ perceptron <- function(w){
     while (active && learning && (epoch < 90)){
       error <- class[i] - result #Calculando o erro
       w <- training(x,w,error) #Ajustando os pesos
-      #print(w)
+      print(w)
       result <- v(x,w) #Reavaliando o resultado
       epoch <- epoch + 1
     }
