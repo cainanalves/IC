@@ -20,16 +20,13 @@
 		(loop for j in i do
 			(if (equalp j nil)
 				(write '[___])
-				(if (equalp j 1)
-					(write '[_x_])
-					(if (equalp j 2)	
-						(write '[_o_])
-						(if (equalp j 3)	
-							(write '[_b_])
-						)
-					)
+				(case j 
+					(1 (write '[_x_]))
+					(2 (write '[_o_]))
+					(3 (write '[_b_]))
 				)
 			)
+			
 		)
 		(terpri)
 	)
