@@ -1,22 +1,24 @@
-print(getwd())
-#setwd("/home/cainan/IC/perceptron/")
-database <- read.csv("database.csv")
+getwd()
+#setwd("/home/IC/perceptron/numbers")
 
-rows <- 4
-cols <- 3
+# 1,1,1,1,1
+# 1,0,0,0,1
+# 1,0,0,0,1
+# 1,1,1,1,1
+# 1,0,0,0,1
+# 1,0,0,0,1
+# 1,1,1,1,1
 
-#######################
-#class <- c(0,0,1,1) ##
-#class <- c(0,0,0,1) ## AND
- class <- c(0,1,1,1) ## OR
-#class <- c(1,1,0,1) ## IMPLIES
-#######################
 
+database <- read.csv("zero.csv")
+#print(database)
+rows <- nrow(database)
+cols <- ncol(database)
 
 #Combinador Linear
 v <- function(x,w){
   sum <- 0
-  for (i in 1:cols){
+  for (i in 1:length(w)){
     sum <- sum + (x[i]*w[i])
   }
   return (sum)
@@ -32,29 +34,29 @@ activation <- function(result){
 
 #Função de treinamento
 training <- function(x,w,error,LF){
-  for(i in 1:cols){
-    w[i] <- w[i] + LF*error*x[i] 
+  for(i in 1:length(w)){
+    w[i] <- w[i] + LF*error*x[i]
   }
   return(w)
 }
 
 #Lê da base e insere no vetor x
 read_database <- function(line){
-  x <- rep(0,cols)
+  x <- c()
   for (i in 1:cols){
-      x[i] <- database[line,i]
+    x[i] <- database[line,i]
   }
   return (x)
 }
 
-learn <- function(active,line){
-  if(active != class[line])
+learn <- function(active,x){
+  if(active != x[cols])
     return (TRUE)
   return (FALSE)
 }
 
 perceptron <- function(LF){
-  w <- c(runif (3,-1,1))
+  w <- c(runif ((cols - 1),-1,1)) #Pesos sinápticos aleatórios (valores entre -1 e 1)
   print(w)
   epoch <- 0
   for (i in 1:rows){
@@ -62,12 +64,11 @@ perceptron <- function(LF){
     learning <- TRUE
     while (learning){
       result <- v(x,w)
-      #print(result)
       active <- activation(result)
-      error <- class[i] - active #Calculando o erro
+      error <- x[cols] - active #Calculando o erro
       w <- training(x,w,error,LF) #Ajustando os pesos
       #print(w)
-      learning <- learn(active,i)
+      learning <- learn(active,x)
       epoch <- epoch + 1
     }
     print(active)
@@ -76,6 +77,11 @@ perceptron <- function(LF){
 }
 
 perceptron(0.1)
+
+
+
+
+
 
 
 
