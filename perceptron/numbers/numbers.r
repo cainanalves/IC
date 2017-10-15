@@ -1,19 +1,16 @@
+setwd("/home/cainan/IC/perceptron/numbers")
 getwd()
-#setwd("/home/IC/perceptron/numbers")
 
-# 1,1,1,1,1
-# 1,0,0,0,1
-# 1,0,0,0,1
-# 1,1,1,1,1
-# 1,0,0,0,1
-# 1,0,0,0,1
-# 1,1,1,1,1
+# 1,1,1,1,1,0,1,1,1,1,1,0,1,1,1,1,1,0,0,1,1,1,0,1,1,1,1,1,0,1,1,1,1,1,0,1,1,1,1,1,0,1,1,1,1,1,0,0,0,1,1,1,0,0,0,1,0,0,0,0,1
+# 1,0,0,0,1,0,1,0,0,0,0,0,1,0,0,0,1,0,1,0,0,0,0,1,0,0,0,0,0,1,0,0,0,1,0,0,0,1,0,0,0,1,0,0,0,1,0,0,1,0,0,0,1,0,0,1,0,0,0,0,1
+# 1,0,0,0,1,0,1,0,0,0,0,0,1,0,0,0,1,0,1,0,0,0,0,1,0,0,0,0,0,1,0,0,0,1,0,0,0,1,0,0,0,1,0,0,0,1,0,1,0,0,0,0,0,1,0,1,1,0,0,0,1
+# 1,1,1,1,0,0,1,1,1,1,1,0,1,1,1,1,0,0,1,0,0,0,0,1,1,1,1,1,0,1,1,1,1,0,0,0,0,1,0,0,0,1,1,1,1,0,0,1,0,0,0,0,0,1,0,1,0,1,0,0,1
+# 1,0,0,0,0,0,1,0,0,0,0,0,1,0,1,0,0,0,1,0,0,0,0,1,0,0,0,0,0,1,0,0,0,0,0,0,0,1,0,0,0,1,0,1,0,0,0,1,0,0,0,0,0,1,0,1,0,0,1,0,1
+# 1,0,0,0,0,0,1,0,0,0,0,0,1,0,0,1,0,0,1,0,0,0,0,1,0,0,0,0,0,1,0,0,0,0,0,0,0,1,0,0,0,1,0,0,1,0,0,0,1,0,0,0,1,0,0,1,0,0,0,1,1
+# 1,0,0,0,0,0,1,1,1,1,1,0,1,0,0,0,1,0,0,1,1,1,0,1,1,1,1,1,0,1,0,0,0,0,0,0,0,1,0,0,0,1,0,0,0,1,0,0,0,1,1,1,0,0,0,1,0,0,0,0,1
 
-
-database <- read.csv("zero.csv")
-#print(database)
-rows <- nrow(database)
-cols <- ncol(database)
+databases <- list("zero.csv","one.csv","two.csv","three.csv","four.csv","five.csv",
+                 "six.csv","seven.csv","eight.csv","nine.csv")
 
 #Combinador Linear
 v <- function(x,w){
@@ -31,7 +28,6 @@ activation <- function(result){
   return (0)
 }
 
-
 #Função de treinamento
 training <- function(x,w,error,LF){
   for(i in 1:length(w)){
@@ -41,7 +37,7 @@ training <- function(x,w,error,LF){
 }
 
 #Lê da base e insere no vetor x
-read_database <- function(line){
+read_database <- function(line,database,cols){
   x <- c()
   for (i in 1:cols){
     x[i] <- database[line,i]
@@ -49,18 +45,27 @@ read_database <- function(line){
   return (x)
 }
 
-learn <- function(active,x){
+learn <- function(active,x,cols){
   if(active != x[cols])
     return (TRUE)
   return (FALSE)
 }
 
-perceptron <- function(LF){
+number_decipher <- function(number){
+  for(i in 1:10){
+    if(number[i] == 1){
+      print(format(data.frame("--- Número ---" = (i - 1),check.names = FALSE)))
+    }
+  }
+}
+
+perceptron <- function(LF,database,rows,cols){
   w <- c(runif ((cols - 1),-1,1)) #Pesos sinápticos aleatórios (valores entre -1 e 1)
-  print(w)
+  #print(w)
+  number <- rep(0,10)
   epoch <- 0
   for (i in 1:rows){
-    x <- read_database(i)
+    x <- read_database(i,database,cols)
     learning <- TRUE
     while (learning){
       result <- v(x,w)
@@ -68,17 +73,25 @@ perceptron <- function(LF){
       error <- x[cols] - active #Calculando o erro
       w <- training(x,w,error,LF) #Ajustando os pesos
       #print(w)
-      learning <- learn(active,x)
+      learning <- learn(active,x,cols)
       epoch <- epoch + 1
     }
-    print(active)
+    number[i] <- active
   }
-  format(data.frame("--- Épocas ---" = epoch,check.names = FALSE))
+  number_decipher(number)
+  print(format(data.frame("... Épocas ..." = epoch,check.names = FALSE)))
 }
 
-perceptron(0.1)
+start <- function(){
+  for(i in databases){
+    database <- read.csv(i)
+    rows <- nrow(database)
+    cols <- ncol(database)
+    perceptron(0.1,database,rows,cols)
+  }
+}
 
-
+start()
 
 
 
