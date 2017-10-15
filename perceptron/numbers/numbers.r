@@ -54,15 +54,16 @@ learn <- function(active,x,cols){
 number_decipher <- function(number){
   for(i in 1:10){
     if(number[i] == 1){
-      print(format(data.frame("--- Número ---" = (i - 1),check.names = FALSE)))
+      return (i - 1)
     }
   }
 }
 
-perceptron <- function(LF,database,rows,cols){
+perceptron <- function(LF,database){
+  rows <- nrow(database)
+  cols <- ncol(database)
   w <- c(runif ((cols - 1),-1,1)) #Pesos sinápticos aleatórios (valores entre -1 e 1)
-  #print(w)
-  number <- rep(0,10)
+  number <- c()
   epoch <- 0
   for (i in 1:rows){
     x <- read_database(i,database,cols)
@@ -78,16 +79,14 @@ perceptron <- function(LF,database,rows,cols){
     }
     number[i] <- active
   }
-  number_decipher(number)
-  print(format(data.frame("... Épocas ..." = epoch,check.names = FALSE)))
+  n <- number_decipher(number)
+  print(format(data.frame("Número" = n,"Épocas" = epoch,check.names = FALSE)))
 }
 
 start <- function(){
   for(i in databases){
     database <- read.csv(i)
-    rows <- nrow(database)
-    cols <- ncol(database)
-    perceptron(0.1,database,rows,cols)
+    perceptron(0.1,database)
   }
 }
 
