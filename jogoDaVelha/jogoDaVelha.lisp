@@ -130,7 +130,6 @@
 			(terpri)
 			(imprimir-tabuleiro)
 			(when (busca-vit) (return-from iniciar-jogo))
-			
 		)
 		(terpri)
 		(write-line "Empate!!")
