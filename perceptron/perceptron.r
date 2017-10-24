@@ -1,11 +1,11 @@
-    setwd("/home/cainan/IC/perceptron")
+   setwd("/home/cainan/IC/perceptron")
     getwd()
     
     #0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
     #0,1,1,1,1,1,0,1,1,1,1,0,1,1,1,1,1,0,0,1,1,1,0,1,1,1,1,0,1,1,1,1,1,0,1,1,1,1,1,0,1,1,1,1,1,0,0,0,1,1,1,0,0,0,1,0,0,0,0,1,0
     #0,1,0,0,0,1,0,1,0,0,0,0,1,0,0,0,1,0,1,0,0,0,0,1,0,0,0,0,1,0,0,0,1,0,0,0,1,0,0,0,1,0,0,0,1,0,0,1,0,0,0,1,0,0,1,0,0,0,0,1,0
     #0,1,0,0,0,1,0,1,0,0,0,0,1,0,0,0,1,0,1,0,0,0,0,1,0,0,0,0,1,0,0,0,1,0,0,0,1,0,0,0,1,0,0,0,1,0,1,0,0,0,0,0,1,0,1,1,0,0,0,1,0
-    #0,1,1,1,1,0,0,1,1,1,1,0,1,1,1,1,0,0,1,0,0,0,0,1,1,1,1,0,1,1,1,1,0,0,0,0,1,0,0,0,1,1,1,1,0,0,1,0,0,0,0,0,1,0,1,0,1,0,0,1,0
+    #0,1,1,1,1,1,0,1,1,1,1,0,1,1,1,1,0,0,1,0,0,0,0,1,1,1,1,0,1,1,1,1,1,0,0,0,1,0,0,0,1,1,1,1,0,0,1,0,0,0,0,0,1,0,1,0,1,0,0,1,0
     #0,1,0,0,0,0,0,1,0,0,0,0,1,0,1,0,0,0,1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,0,0,0,1,0,0,0,1,0,1,0,0,0,1,0,0,0,0,0,1,0,1,0,0,1,0,1,0
     #0,1,0,0,0,0,0,1,0,0,0,0,1,0,0,1,0,0,1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,0,0,0,1,0,0,0,1,0,0,1,0,0,0,1,0,0,0,1,0,0,1,0,0,0,1,1,0
     #0,1,0,0,0,0,0,1,1,1,1,0,1,0,0,0,1,0,0,1,1,1,0,1,1,1,1,0,1,0,0,0,0,0,0,0,1,0,0,0,1,0,0,0,1,0,0,0,1,1,1,0,0,0,1,0,0,0,0,1,0
@@ -48,6 +48,13 @@
       return (x)
     }
     
+    number_decipher <- function(database){
+      vector <- database$class
+      for(i in 1:length(vector))
+        if(vector[i] == 1)
+          return (i-1)
+    }
+    
     perceptron <- function(LF,database,name){
       rows <- nrow(database)
       cols <- ncol(database)
@@ -58,6 +65,7 @@
         ERROR <- FALSE
         for (line in 1:rows){
           x <- read_database(line,database,cols)
+          
           result <- v(x,w)
           active <- activation(result)
           #print(active)
@@ -69,26 +77,31 @@
         }
         epoch <- epoch + 1
       }
-      #write.csv(w,paste("weights/",name, sep = "", collapse = "")) #Guardando os pesos
-      print(format(data.frame("Épocas" = epoch,check.names = FALSE)))
+      write.csv(w,paste("weights/",name, sep = "", collapse = "")) #Guardando os pesos
+      return (epoch)
     }
     
     start <- function(){
       cat("PERCEPTRON - O que deseja treinar?\n  1 - Operadores lógicos\n  2 - Dígitos (0 ... 9)") 
       learn <- readline()
+      epoch <- c()
       if(learn == 1){
-        databases <- logics
+        for(i in logics){
+          database <- read.csv(i)
+          epoch[i] <- perceptron(0.1,database,i)
+        }
+        print(format(data.frame("Épocas" = epoch,check.names = FALSE)))
       }else if(learn == 2){
-        databases <- numbers
-      }
-      for(i in databases){
-        print(i)
-        database <- read.csv(i)
-        perceptron(0.1,database,i)
+        number <- c()
+        for(i in numbers){
+          database <- read.csv(i)
+          number[i] <- number_decipher(database)
+          epoch[i] <- perceptron(0.1,database,i)
+        }
+        print(format(data.frame("Número" = number,"Épocas" = epoch,check.names = FALSE)))
       }
         
     }
-    
     start()
     
     
