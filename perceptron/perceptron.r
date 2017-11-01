@@ -15,7 +15,7 @@
     numbers <- list("numbers/zero.csv","numbers/one.csv","numbers/two.csv","numbers/three.csv","numbers/four.csv","numbers/five.csv",
                       "numbers/six.csv","numbers/seven.csv","numbers/eight.csv","numbers/nine.csv")
     
-    #Combinador Linear
+    #Combinador Linear 
     v <- function(x,w){
       sum <- 0
       for (i in 1:length(w)){
@@ -55,28 +55,41 @@
           return (i-1)
     }
     
+    permute <- function(x){
+      position <- runif (1,1,(length(x)-1))
+      aux <- x[position]
+      x[position] <- x[position + 1]
+      x[position + 1] <- aux
+      return (x)
+    }
+    
     perceptron <- function(LF,database,name){
       rows <- nrow(database)
       cols <- ncol(database)
       w <- c(runif ((cols - 1),-1,1)) #Pesos sinápticos aleatórios (valores entre -1 e 1)
-      epoch <- 0
+      errors <-c()
+      count <- 1
+      epoch <- 1
       ERROR <- TRUE
       while(ERROR){
         ERROR <- FALSE
         for (line in 1:rows){
           x <- read_database(line,database,cols)
-          
+          #x <- permute(x)
           result <- v(x,w)
           active <- activation(result)
           #print(active)
-          if(active != x[cols]){
+          if(!ERROR & (active != x[cols])){
             e <- x[cols] - active #Calculando o erro
+            errors[count] <- e
+            count <- count + 1
             w <- training(x,w,e,LF) #Ajustando os pesos
             ERROR <- TRUE
           }
         }
         epoch <- epoch + 1
       }
+      write.csv(errors,paste("errors/",name, sep = "", collapse = "")) #Guardando os erros
       write.csv(w,paste("weights/",name, sep = "", collapse = "")) #Guardando os pesos
       return (epoch)
     }
@@ -103,5 +116,3 @@
         
     }
     start()
-    
-    
