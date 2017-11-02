@@ -79,8 +79,8 @@
           result <- v(x,w)
           active <- activation(result)
           #print(active)
-          if(!ERROR & (active != x[cols])){
-            e <- x[cols] - active #Calculando o erro
+          if(active != x[cols]){
+            e <- x[cols] - result #Calculando o erro
             errors[count] <- e
             count <- count + 1
             w <- training(x,w,e,LF) #Ajustando os pesos
@@ -89,8 +89,8 @@
         }
         epoch <- epoch + 1
       }
-      write.csv(errors,paste("errors/",name, sep = "", collapse = "")) #Guardando os erros
-      write.csv(w,paste("weights/",name, sep = "", collapse = "")) #Guardando os pesos
+      # write.csv(errors,paste("errors/",name, sep = "", collapse = "")) #Guardando os erros
+      # write.csv(w,paste("weights/",name, sep = "", collapse = "")) #Guardando os pesos
       return (epoch)
     }
     
