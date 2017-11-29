@@ -2,7 +2,7 @@ library("RSNNS")
 setwd("/home/cainan/IC/perceptron/MLP")
 
 read_database <- function(){
-  cat("Que número deseja treinar? (0 ... 9)") 
+  cat("Que número deseja treinar? (0 ... 9) ou 10 para treinar todos (com bits permutados)") 
   learn <- readline()
   
   if(learn == 0)
@@ -25,6 +25,8 @@ read_database <- function(){
     archive <- "eight"
   else if(learn == 9)
     archive <- "nine"
+  else if(learn == 10)
+    archive <- "numbers"
   
   return (archive)
 }
