@@ -11,18 +11,18 @@ import os
 bot = ChatBot("Teste")#read_only=True)
 bot.set_trainer(ListTrainer)
 
-for arq in os.listdir('arqs'):
-	chats = open('arqs/'+arq,'rb').readlines()
+for arq in os.listdir("arqs"):
+	chats = open("arqs/"+arq,"rb").readlines()
 	bot.train(chats)
 
 
 conversa = open("arqs/conversa", "a")
 while True:
-	resq = input('Você: ')
+	resq = input("Você: ")
 	conversa.write(str(resq)+"\n")
 	resp = bot.get_response(resq)
 	conversa.write(str(resp)+"\n")
-	print('Bot: '+ str(resp))
+	print("Bot: "+ str(resp))
 	if (("chega de papo" in str(resq)) or ("chega de papo" in str(resp))):
 		break
 conversa.close()
