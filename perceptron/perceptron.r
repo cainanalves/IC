@@ -12,8 +12,9 @@
     #0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
     
     logics <- list("logics/and.csv","logics/or.csv","logics/implies.csv")
-    numbers <- list("numbers/zero.csv","numbers/one.csv","numbers/two.csv","numbers/three.csv","numbers/four.csv","numbers/five.csv",
-                      "numbers/six.csv","numbers/seven.csv","numbers/eight.csv","numbers/nine.csv")
+    numbers <- list("zero","one","two","three","four","five","six","seven","eight","nine")
+    
+    # "numbers/six.csv"
     
     #Combinador Linear 
     v <- function(x,w){
@@ -37,6 +38,20 @@
         w[i] <- w[i] + LF*error*x[i]
       }
       return(w)
+    }
+    
+    save_file <- function(errors,archive){
+      # Salvando PDF
+      archivePDF <- paste("graphics/pdf/",archive,".pdf", sep = "", collapse = "")
+      pdf(archivePDF, width = 14, height = 8)
+        plot(errors,type = "o",col = "blue",ylab = "Errors")
+      dev.off()
+      
+      # Salvando PNG
+      archivePNG <- paste("graphics/png/",archive,".png", sep = "", collapse = "")
+      png(file = archivePNG)
+        plot(errors,type = "o",col = "blue",ylab = "Errors")
+      dev.off()
     }
     
     #Lê da base e insere no vetor x
@@ -89,6 +104,7 @@
         }
         epoch <- epoch + 1
       }
+      save_file(errors,name)
       # write.csv(errors,paste("errors/",name, sep = "", collapse = "")) #Guardando os erros
       # write.csv(w,paste("weights/",name, sep = "", collapse = "")) #Guardando os pesos
       return (epoch)
@@ -107,7 +123,8 @@
       }else if(learn == 2){
         number <- c()
         for(i in numbers){
-          database <- read.csv(i)
+          base <- paste("numbers/",i,".csv", sep = "", collapse = "")
+          database <- read.csv(base)
           number[i] <- number_decipher(database)
           epoch[i] <- perceptron(0.1,database,i)
         }
